@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XO OSKAR - Shadow and Comando</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background: black;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            padding: 50px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 4em;
+            margin: 0;
+            text-shadow: 0 0 15px #0f0;
+        }
+
+        h2 {
+            font-size: 3em;
+            margin: 10px 0;
+        }
+
+        .tagline {
+            font-size: 1.6em;
+            margin: 20px 0;
+        }
+
+        .welcome {
+            font-size: 2.2em;
+            margin: 30px 0;
+            text-shadow: 0 0 10px #0f0;
+        }
+
+        .lightning {
+            font-size: 6em;
+            border: 10px solid #0f0;
+            border-radius: 50%;
+            padding: 30px;
+            display: inline-block;
+            margin: 40px 0;
+            box-shadow: 0 0 40px #0f0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 40px #0f0; }
+            50% { box-shadow: 0 0 60px #0f0; }
+            100% { box-shadow: 0 0 40px #0f0; }
+        }
+
+        .boxes {
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+            margin: 50px 0;
+            width: 85%;
+            max-width: 650px;
+        }
+
+        .box {
+            padding: 35px;
+            background: rgba(0, 0, 0, 0.75);
+            border-radius: 20px;
+            font-size: 1.9em;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+
+        .box::before {
+            content: '';
+            position: absolute;
+            inset: -12px;
+            padding: 12px;
+            background: conic-gradient(
+                red, orange, yellow, lime, cyan, blue, magenta, red
+            );
+            border-radius: 32px;
+            animation: rainbow 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rainbow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        a {
+            color: #0ff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        a:hover {
+            text-shadow: 0 0 15px #0ff;
+            color: #0ff;
+        }
+
+        .telegram-icon {
+            width: 55px;
+            height: 55px;
+            vertical-align: middle;
+            margin-left: 15px;
+            filter: drop-shadow(0 0 10px #0ff);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+
+    <div class="content">
+        <h1>XO OSKAR</h1>
+        <h2># OSKAR</h2>
+        <p class="tagline">▪️ Shadow and Comando ▪️</p>
+        <p class="welcome">خوش آمدید OSKAR به تیم آمدید ⚡</p>
+
+        <div class="lightning">⚡</div>
+
+        <div class="boxes">
+            <div class="box">
+                چنل OSKAR<br>
+                <a href="https://shad.ir/OSKAR_TEM2" target="_blank">https://shad.ir/OSKAR_TEM2</a>
+            </div>
+
+            <div class="box">
+                ارتباط با مالک<br>
+                <a href="https://shad.ir/LEDER_MOHANDES" target="_blank">https://shad.ir/LEDER_MOHANDES</a>
+            </div>
+
+            <div class="box">
+                گروه OSKAR<br>
+                <a href="https://t.me/+7HH4M_KP0is3NmUx" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" class="telegram-icon">
+                    جوین گروه
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?~アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0f0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 33);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
